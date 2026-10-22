@@ -1,0 +1,29 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Django generated files
+staticfiles/
+.coverage
+htmlcov/
+
+# Security scan reports
+semgrep-report.json
+mediplus-zap-report.html
+
+# Local backups
+*.backup
+
+# Editor files
+.vscode/
+
+# Local database and user uploads
+db.sqlite3
+media/

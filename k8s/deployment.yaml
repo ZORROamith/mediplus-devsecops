@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mediplus
+  namespace: mediplus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mediplus
+  template:
+    metadata:
+      labels:
+        app: mediplus
+    spec:
+      containers:
+        - name: mediplus
+          image: mediplus-app:1.2
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mediplus-secrets
+                  key: DJANGO_SECRET_KEY
+            - name: DJANGO_DEBUG
+              value: "False"
+            - name: DJANGO_ALLOWED_HOSTS
+              value: "3.108.215.155,localhost,127.0.0.1"
+          volumeMounts:
+            - name: mediplus-data
+              mountPath: /app/db.sqlite3
+              subPath: db.sqlite3
+            - name: mediplus-data
+              mountPath: /app/media
+              subPath: media
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 384Mi
+      volumes:
+        - name: mediplus-data
+          hostPath:
+            path: /var/lib/mediplus
+            type: Directory
